@@ -2,16 +2,6 @@
 
 A Streamlit dashboard and ML pipeline that predicts Formula 1 race finishing positions from session data and computes over/under prop probabilities. Built end-to-end: data ingestion with FastF1, preprocessing, model training (XGBoost + scikit-learn pipeline), and interactive exploration.
 
-- **Areas**: ML/DS/SWE (data engineering, model training, MLOps-lite, UI)
-- **Tech**: Python, pandas, NumPy, scikit-learn, XGBoost, Streamlit, FastF1
-
-### Highlights (for resume)
-
-- **End-to-end ML system**: data ingestion → preprocessing → training → evaluation → interactive inference UI.
-- **Modeling**: XGBoost multiclass classifier with sliding-window cross-year validation and class/recency weighting.
-- **Productization**: shareable Streamlit app for batch and single-row predictions with probability-based prop lines.
-- **Reproducibility**: deterministic paths and CLI for data cleaning/training.
-
 ### Project structure
 
 - `app.py`: Streamlit UI for batch/manual predictions, prop odds, feature glossary, and encoding guide.
@@ -87,18 +77,3 @@ python -m f1pred.cli train                  # uses data/processed_data.csv by de
 - Features include historical session metrics (lap times, gaps to pole, weather), categorical encodings for drivers/teams/circuits, and session-type indicators.
 - Pipeline: `ColumnTransformer(StandardScaler + OneHotEncoder)` → `XGBClassifier(objective="multi:softprob")`.
 - Evaluation: sliding-window by season year with optional recency weighting and class balancing; reports mean accuracy and OVR AUC.
-
-### Troubleshooting
-
-- If `xgboost` install fails on your platform, try upgrading pip and wheel first:
-
-```bash
-python -m pip install --upgrade pip wheel
-pip install -r requirements.txt
-```
-
-- If Streamlit cannot find model artifacts, ensure you have run steps (1) and (2) above.
-
-### What I built (blurb)
-
-Built an end-to-end F1 race prediction system: engineered features from FastF1, trained an XGBoost multiclass model with cross-season validation, and shipped a Streamlit dashboard that generates batch/single predictions and over/under prop probabilities.
