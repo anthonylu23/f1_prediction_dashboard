@@ -12,6 +12,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
 import xgboost as xgb
+from sklearn.metrics import accuracy_score, f1_score
 
 from .paths import MODEL_PIPELINE_PATH, LABEL_ENCODER_PATH
 
@@ -143,7 +144,14 @@ def train_and_eval_multiclass(
             y_test = y[test_idx]
             scores.append(model_pipeline.score(X_test, y_test))
             proba = model_pipeline.predict_proba(X_test)
-            auc_scores.append(roc_auc_score(y_test, proba, multi_class="ovr"))
+            pred = model_pipeline.predict(X_test)
+            auc_score = roc_auc_score(y_test, proba, multi_class="ovr")
+            accuracy = accuracy_score(y_test, pred)
+            f1score = f1_score(y_test, pred, average="macro")
+            print(f"AUC score: {auc_score}")
+            print(f"Accuracy score: {accuracy}")
+            print(f"F1 score: {f1score}")
+            auc_scores.append(auc_score)
 
     joblib.dump(model_pipeline, MODEL_PIPELINE_PATH)
     return {
