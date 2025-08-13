@@ -97,6 +97,7 @@ def sliding_window_splits(
 
 def train_and_eval_multiclass(
     dataset: pd.DataFrame,
+    classifier: xgb.XGBClassifier,
     *,
     target_col: str = "session_5_final_position",
     save_model: bool = True,
@@ -111,12 +112,6 @@ def train_and_eval_multiclass(
     joblib.dump(label_encoder, LABEL_ENCODER_PATH)
 
     n_classes = len(np.unique(y))
-    classifier = xgb.XGBClassifier(
-        objective="multi:softprob",
-        n_estimators=100,
-        random_state=42,
-        num_class=n_classes,
-    )
     model_pipeline = Pipeline([
         ("preprocessor", preprocessor),
         ("classifier", classifier),
@@ -124,7 +119,7 @@ def train_and_eval_multiclass(
 
     scores: list[float] = []
     auc_scores: list[float] = []
-
+    f1_scores: list[float] = []
     for split in sliding_window_splits(dataset):
         if len(split) == 3:
             train_idx, test_idx, recency_w = split
@@ -148,12 +143,12 @@ def train_and_eval_multiclass(
             pred = model_pipeline.predict(X_test)
             auc_score = roc_auc_score(y_test, proba, multi_class="ovr")
             accuracy = accuracy_score(y_test, pred)
-            f1score = f1_score(y_test, pred, average="macro")
+            f1score = f1_score(y_test, pred, average="weighted")
             print(f"AUC score: {auc_score}")
             print(f"Accuracy score: {accuracy}")
             print(f"F1 score: {f1score}")
             auc_scores.append(auc_score)
-
+            f1_scores.append(f1score)
     if save_model:
         joblib.dump(model_pipeline, MODEL_PIPELINE_PATH)
         return {
@@ -161,11 +156,13 @@ def train_and_eval_multiclass(
             "label_encoder_path": str(LABEL_ENCODER_PATH),
             "mean_accuracy": float(np.mean(scores)) if scores else None,
             "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,
+            "mean_f1": float(np.mean(f1_scores)) if f1_scores else None,
         }
     else:
         return {
             "mean_accuracy": float(np.mean(scores)) if scores else None,
             "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,
+            "mean_f1": float(np.mean(f1_scores)) if f1_scores else None,
         }
 
 
