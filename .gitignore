@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+.python-version
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Caches
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Streamlit
+.streamlit/
+
+# FastF1 cache (optional)
+fastf1_cache/
+
+# Model artifacts
+model_pipeline.pkl
+label_encoder.pkl
+
+# Generated data that changes frequently
+# (Keep training datasets and encodings in repo; ignore only the latest snapshot)
+data/latest_race_data.csv
+
