@@ -99,6 +99,7 @@ def train_and_eval_multiclass(
     dataset: pd.DataFrame,
     *,
     target_col: str = "session_5_final_position",
+    save_model: bool = True,
 ) -> dict:
     features = infer_feature_sets(dataset, target_col)
     preprocessor = build_preprocessor(features)
@@ -153,12 +154,18 @@ def train_and_eval_multiclass(
             print(f"F1 score: {f1score}")
             auc_scores.append(auc_score)
 
-    joblib.dump(model_pipeline, MODEL_PIPELINE_PATH)
-    return {
-        "pipeline_path": str(MODEL_PIPELINE_PATH),
-        "label_encoder_path": str(LABEL_ENCODER_PATH),
-        "mean_accuracy": float(np.mean(scores)) if scores else None,
-        "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,
-    }
+    if save_model:
+        joblib.dump(model_pipeline, MODEL_PIPELINE_PATH)
+        return {
+            "pipeline_path": str(MODEL_PIPELINE_PATH),
+            "label_encoder_path": str(LABEL_ENCODER_PATH),
+            "mean_accuracy": float(np.mean(scores)) if scores else None,
+            "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,
+        }
+    else:
+        return {
+            "mean_accuracy": float(np.mean(scores)) if scores else None,
+            "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,
+        }
 
 
