@@ -43,3 +43,5 @@ label_encoder.pkl
 # (Keep training datasets and encodings in repo; ignore only the latest snapshot)
 data/latest_race_data.csv
 
+#AWS
+AWSCLIV2.pkg
