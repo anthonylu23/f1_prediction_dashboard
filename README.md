@@ -17,7 +17,7 @@ A Streamlit dashboard and ML pipeline that predicts Formula 1 race finishing pos
 
 ### Setup
 
-- Python 3.10+ recommended
+- Python 3.12+ recommended
 - Create a virtual environment and install dependencies:
 
 ```bash
