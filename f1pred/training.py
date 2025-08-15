@@ -14,7 +14,7 @@ from sklearn.utils.class_weight import compute_class_weight
 import xgboost as xgb
 from sklearn.metrics import accuracy_score, f1_score
 
-from .paths import MODEL_PIPELINE_PATH, LABEL_ENCODER_PATH
+from .paths import XGB_MODEL_PATH, PREPROCESSOR_PATH, LABEL_ENCODER_PATH
 
 
 @dataclass
@@ -150,9 +150,13 @@ def train_and_eval_multiclass(
             auc_scores.append(auc_score)
             f1_scores.append(f1score)
     if save_model:
-        joblib.dump(model_pipeline, MODEL_PIPELINE_PATH)
+        # Save the preprocessor
+        joblib.dump(preprocessor, PREPROCESSOR_PATH)
+        # Save the trained XGBoost model
+        classifier.save_model(XGB_MODEL_PATH)
         return {
-            "pipeline_path": str(MODEL_PIPELINE_PATH),
+            "preprocessor_path": str(PREPROCESSOR_PATH),
+            "model_path": str(XGB_MODEL_PATH),
             "label_encoder_path": str(LABEL_ENCODER_PATH),
             "mean_accuracy": float(np.mean(scores)) if scores else None,
             "mean_auc": float(np.mean(auc_scores)) if auc_scores else None,

@@ -7,12 +7,23 @@ from typing import Tuple
 import joblib
 import numpy as np
 import pandas as pd
+import xgboost as xgb
+from sklearn.pipeline import Pipeline
 
-from .paths import MODEL_PIPELINE_PATH, LABEL_ENCODER_PATH
+from .paths import XGB_MODEL_PATH, PREPROCESSOR_PATH, LABEL_ENCODER_PATH
 
 
 def load_artifacts():
-    model = joblib.load(MODEL_PIPELINE_PATH)
+    # Load the preprocessor
+    preprocessor = joblib.load(PREPROCESSOR_PATH)
+    # Load the XGBoost model
+    classifier = xgb.XGBClassifier()
+    classifier.load_model(XGB_MODEL_PATH)
+    # Reconstruct the pipeline
+    model = Pipeline([
+        ("preprocessor", preprocessor),
+        ("classifier", classifier),
+    ])
     label_encoder = joblib.load(LABEL_ENCODER_PATH)
     return model, label_encoder
 

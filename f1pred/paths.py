@@ -15,7 +15,8 @@ PROCESSED_DATA_PATH: Path = DATA_DIR / "processed_data.csv"
 LATEST_RACE_DATA_PATH: Path = DATA_DIR / "latest_race_data.csv"
 
 # Model artifacts (kept at project root to preserve current workflow)
-MODEL_PIPELINE_PATH: Path = ROOT_DIR / "model_pipeline.pkl"
+XGB_MODEL_PATH: Path = ROOT_DIR / "xgb_model.json"
+PREPROCESSOR_PATH: Path = ROOT_DIR / "preprocessor.pkl"
 LABEL_ENCODER_PATH: Path = ROOT_DIR / "label_encoder.pkl"
 
 
