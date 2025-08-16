@@ -37,7 +37,6 @@ fastf1_cache/
 
 # Model artifacts
 model_pipeline.pkl
-label_encoder.pkl
 
 # Generated data that changes frequently
 # (Keep training datasets and encodings in repo; ignore only the latest snapshot)
